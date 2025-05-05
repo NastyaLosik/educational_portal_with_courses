@@ -6,7 +6,7 @@ interface IUser {
   lastName: string;
   username: string;
   password: string;
-  role: 'student' | 'teacher';
+  role: "student" | "teacher";
 }
 
 interface IUserMethods {
@@ -16,13 +16,13 @@ interface IUserMethods {
 type UserModel = Model<IUser, object, IUserMethods>;
 
 const userSchema = new Schema<IUser, UserModel, IUserMethods>({
-  firstName: { 
-    type: String, 
-    required: true 
+  firstName: {
+    type: String,
+    required: true,
   },
-  lastName: { 
-    type: String, 
-    required: true 
+  lastName: {
+    type: String,
+    required: true,
   },
   username: {
     type: String,
@@ -33,11 +33,11 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
     type: String,
     required: true,
   },
-  role: { 
-    type: String, 
-    enum: ['student', 'teacher'], 
-    required: true 
-  }
+  role: {
+    type: String,
+    enum: ["student", "teacher"],
+    required: true,
+  },
 });
 
 userSchema.pre("save", async function (next) {

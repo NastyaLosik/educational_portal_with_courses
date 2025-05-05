@@ -6,7 +6,8 @@ const registerUser = async (
   lastName: string,
   username: string,
   password: string,
-  role: 'student' | 'teacher',) => {
+  role: "student" | "teacher",
+) => {
   const existingUser = await UserModel.findOne({ username });
   if (existingUser) {
     throw new Error("Пользователь уже существует");
@@ -37,7 +38,7 @@ const getUserData = async (username: string) => {
   if (!user) {
     throw new Error("User not found!");
   }
-  return user; 
+  return user;
 };
 
 const deleteUser = async (username: string) => {

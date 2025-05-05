@@ -4,7 +4,13 @@ import { authService } from "../services/authService";
 const register = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, username, password, role } = req.body;
-    const user = await authService.registerUser(firstName, lastName, username, password, role );
+    const user = await authService.registerUser(
+      firstName,
+      lastName,
+      username,
+      password,
+      role,
+    );
     const token = authService.generateToken(user._id.toString());
     res.status(201).json({ token });
   } catch (err) {
@@ -26,9 +32,9 @@ const login = async (req: Request, res: Response) => {
 
 const getUserData = async (req: Request, res: Response) => {
   try {
-    const { username } = req.body; 
+    const { username } = req.body;
     const userData = await authService.getUserData(username);
-    
+
     res.status(200).json({
       firstName: userData.firstName,
       lastName: userData.lastName,
@@ -44,7 +50,7 @@ const deleteUser = async (req: Request, res: Response) => {
   try {
     const { username } = req.body;
     await authService.deleteUser(username);
-    res.status(200).json({ message: 'Пользователь успешно удален' });
+    res.status(200).json({ message: "Пользователь успешно удален" });
   } catch (error) {
     const err = error as Error;
     res.status(400).json({ error: err.message });
