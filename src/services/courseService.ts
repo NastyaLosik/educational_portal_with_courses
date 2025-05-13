@@ -1,4 +1,5 @@
 import { CourseModel, Course } from "../models/course";
+import { TagModel } from "../models/tag";
 
 const createCourse = async (courseData: Omit<Course, "slug" | "createdAt">) => {
   const course = new CourseModel({
@@ -42,10 +43,39 @@ const deleteCourse = async (id: string) => {
   }
 };
 
+const createTag = async (name: string) => {
+  if (!name) {
+    throw new Error("Название тега обязательно");
+  }
+  const existingTag = await TagModel.findOne({ name });
+  if (existingTag) {
+    throw new Error("Тег с таким названием уже существует");
+  }
+  const newTag = new TagModel({ name });
+  await newTag.save();
+  return newTag;
+};
+
+const getAllTags = async () => {
+    return await TagModel.find();
+}
+
+const getCoursesByTag = async (tagName: string) => {
+  const tag = await TagModel.findOne({ name: tagName });
+  if (!tag) {
+    throw new Error("Тег не найден");
+  }
+  const courses = await CourseModel.find({ tags: tag._id }).populate("tags");
+  return courses;
+};
+
 export const courseService = {
   createCourse,
   getAllCourses,
   getCourseById,
   updateCourse,
   deleteCourse,
+  createTag,
+  getAllTags,
+  getCoursesByTag,
 };

@@ -14,6 +14,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api", courseRoutes);
+app.use("/uploads", express.static("uploads"));
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

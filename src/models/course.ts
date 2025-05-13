@@ -1,7 +1,7 @@
-import { CallbackError, model, Model, Schema } from "mongoose";
+import { CallbackError, model, Document, Model, Schema, Types } from "mongoose";
 import slugify from "slugify";
 
-export interface Course {
+export interface Course extends Document {
   title: string;
   slug: string;
   description: string;
@@ -12,6 +12,7 @@ export interface Course {
   published: boolean;
   author: string;
   createdAt: Date;
+  tags: Types.ObjectId[];
 }
 
 type CourseModel = Model<Course, object>;
@@ -35,7 +36,7 @@ const courseSchema = new Schema<Course, CourseModel>({
   },
   image: {
     type: String,
-    required: true,
+    required: false,
   },
   category: {
     type: String,
@@ -60,6 +61,12 @@ const courseSchema = new Schema<Course, CourseModel>({
     type: Date,
     required: true,
   },
+  tags: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Tag",
+    },
+  ],
 });
 
 courseSchema.pre("save", function (next) {
