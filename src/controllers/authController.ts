@@ -36,6 +36,7 @@ const getUserData = async (req: Request, res: Response) => {
     const userData = await authService.getUserData(username);
 
     res.status(200).json({
+      _id: userData._id,
       firstName: userData.firstName,
       lastName: userData.lastName,
       username: userData.username,

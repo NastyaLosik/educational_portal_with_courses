@@ -1,3 +1,4 @@
+import { CourseModel } from "../models/course";
 import { UserModel } from "../models/user";
 import jwt from "jsonwebtoken";
 
@@ -47,6 +48,42 @@ const deleteUser = async (username: string) => {
     throw new Error("Пользователь не найден");
   }
 };
+const addToFavorite = async (userId: string, courseId: string) => {
+  const user = await UserModel.findById(userId);
+  if (!user) throw new Error("Пользователь не найден");
+
+  const courseExists = await CourseModel.exists({ _id: courseId });
+  if (!courseExists) throw new Error("Курс не найден");
+
+  if (!user.favorites.includes(courseId)) {
+    user.favorites.push(courseId);
+    await user.save();
+  }
+
+  return user;
+};
+
+const removeFromFavorites = async (userId: string, courseId: string) => {
+  const user = await UserModel.findById(userId);
+  if (!user) throw new Error("Пользователь не найден");
+
+  user.favorites = user.favorites.filter((fav) => fav !== courseId);
+  await user.save();
+
+  return user;
+};
+const getFavoriteCourses = async (userId: string) => {
+  const user = await UserModel.findById(userId);
+  if (!user) throw new Error("Пользователь не найден");
+
+  if (!user.favorites.length) return [];
+
+  const favoriteCourses = await CourseModel.find({
+    _id: { $in: user.favorites },
+  });
+
+  return favoriteCourses;
+};
 
 export const authService = {
   registerUser,
@@ -54,4 +91,7 @@ export const authService = {
   loginUser,
   getUserData,
   deleteUser,
+  addToFavorite,
+  removeFromFavorites,
+  getFavoriteCourses,
 };

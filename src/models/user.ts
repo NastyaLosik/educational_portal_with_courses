@@ -7,6 +7,7 @@ interface IUser {
   username: string;
   password: string;
   role: "student" | "teacher";
+  favorites: string[];
 }
 
 interface IUserMethods {
@@ -37,6 +38,10 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
     type: String,
     enum: ["student", "teacher"],
     required: true,
+  },
+  favorites: {
+    type: [String],
+    default: [],
   },
 });
 
